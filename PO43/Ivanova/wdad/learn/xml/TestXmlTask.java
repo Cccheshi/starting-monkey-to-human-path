@@ -8,12 +8,12 @@ import java.io.IOException;
 
 public class TestXmlTask {
     public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException, TransformerException {
-        XmlTask salaryAverage=new XmlTask();
-        System.out.println(salaryAverage.salaryAverage());
-        System.out.println(salaryAverage.salaryAverage("Продаж"));
-        salaryAverage.setJobTitle("Александр","Перчиков","asd" );
-        salaryAverage.setSalary("Александр","Перчиков",50000);
-        salaryAverage.fireEmployee("Александр","Перчиков");
+        XmlTask xmlTask=new XmlTask();
+        System.out.println(xmlTask.salaryAverage());
+        System.out.println(xmlTask.salaryAverage("Продаж"));
+        xmlTask.setJobTitle("Александр","Перчиков","asd" );
+        xmlTask.setSalary("Александр","Перчиков",50000);
+        xmlTask.fireEmployee("Александр","Перчиков");
     }
 }
 

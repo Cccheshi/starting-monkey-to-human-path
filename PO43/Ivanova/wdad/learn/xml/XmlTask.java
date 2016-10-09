@@ -17,15 +17,17 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class XmlTask {
-    File file = new File("C:/Users/User/IdeaProjects/starting-monkey-to-human-path/src/PO43/Ivanova/wdad/learn/xml/Appropriate.xml");
-    /* DocumentBuilderFactory dbf=DocumentBuilderFactory.newInstance();
-     DocumentBuilder db=dbf.newDocumentBuilder();
-     Document document=db.parse(file);*/
-    Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
+    private String path="C:/Users/User/IdeaProjects/starting-monkey-to-human-path/src/PO43/Ivanova/wdad/learn/xml/Appropriate.xml";
+    Document document;
 
     public XmlTask() throws ParserConfigurationException, IOException, SAXException {
+       document= createDocument();
     }
-
+    private Document createDocument() throws ParserConfigurationException, IOException, SAXException {
+        File file = new File(path);
+        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
+        return document;
+    }
     private int countSalaryAverage(NodeList nodeList) {
         int salary;
         int salarySum = 0;
