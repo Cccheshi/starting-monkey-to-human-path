@@ -67,12 +67,12 @@ public class XmlTask {
         for (int i = 0; i < employee.getLength(); i++) {
             if (employee.item(i).getAttributes().getNamedItem(attrFirstName).getNodeValue().equals(firstName) && employee.item(i).getAttributes().getNamedItem(attrSecondName).getNodeValue().equals(secondName)) {
                 node = employee.item(i);
+                return node;
             }
 
         }
         return node;
     }
-
     private void writeDoc() throws TransformerException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
@@ -96,10 +96,11 @@ public class XmlTask {
     //изменяет размер зароботной платы сотрудника.
     public void setSalary(String firstName, String secondName, int newSalary) throws TransformerException {
         String tegSalary = "salary";
-        NodeList employee = findEmployee(firstName, secondName).getChildNodes();
-        for (int i = 0; i < employee.getLength(); i++) {
-            if (employee.item(i).getNodeName().equals(tegSalary)) {
-                employee.item(i).setTextContent(String.valueOf(newSalary));
+        Node employee=findEmployee(firstName,secondName);
+        NodeList employeeChild = employee.getChildNodes();
+        for (int i = 0; i < employeeChild.getLength(); i++) {
+            if (employeeChild.item(i).getNodeName().equals(tegSalary)) {
+                employeeChild.item(i).setTextContent(String.valueOf(newSalary));
             }
         }
         writeDoc();

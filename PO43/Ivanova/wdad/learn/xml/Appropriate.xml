@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><organization name="ФAS">
 <department name="Продаж">
-<employee firstname="Алексанлр" secondname="Перчиков">
+<employee firstname="Александр" secondname="Перчиков">
 <hiredate>"29.02.2001"</hiredate>
     <salary>20000</salary>
 <jobtitle value="assistant"/>
@@ -15,7 +15,6 @@
         <salary>5000</salary>
         <jobtitle value="manger"/>
     </employee>
-
 </department>
     <department name="Финансовый">
         <employee firstname="Ирина" secondname="Ксеновна">
