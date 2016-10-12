@@ -10,39 +10,36 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 public class XmlTask {
-    //TODO move to constructor with exception's handling
-    File file = new File("C:/Users/User/IdeaProjects/starting-monkey-to-human-path/src/PO43/Ivanova/wdad/learn/xml/Appropriate.xml");
-    /* DocumentBuilderFactory dbf=DocumentBuilderFactory.newInstance();
-     DocumentBuilder db=dbf.newDocumentBuilder();
-     Document document=db.parse(file);*/
-    Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
+    Document document;
+    String path="C:/Users/User/IdeaProjects/starting-monkey-to-human-path/src/PO43/Ivanova/wdad/learn/xml/Appropriate.xml";
 
     public XmlTask() throws ParserConfigurationException, IOException, SAXException {
+        File file = new File(path);
+        document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
     }
 
-    private int countSalaryAverage(NodeList nodeList) {
-        int salary;
-        int salarySum = 0;
-        int count = 0;
+    private int countSalaryAverage(NodeList nodeList){
+        int salary=0;
+        int salarySum=0;
         for (int j = 0; j < nodeList.getLength(); j++) {
-            //TODO catch NumberFormatException
-            salary = Integer.valueOf(nodeList.item(j).getTextContent());
-            salarySum += salary;
-            count++;
+            try {
+                salary = Integer.valueOf(nodeList.item(j).getTextContent());
+                salarySum += salary;
+        }catch (NumberFormatException e){
+                System.out.println("Не верный формат числа");
+                return 0;
+            }
         }
-        return salarySum / count;
+        return salarySum / nodeList.getLength();
     }
 
     //возвращает среднюю заработную плату сотрудников организации.
     public int salaryAverage() {
-        return average (document, "salary");
+        return average (document.getDocumentElement(), "salary");
     }
 
     private int average(Node node, String param) {
@@ -54,14 +51,14 @@ public class XmlTask {
     }
 
     //возвращает среднюю заработную плату сотрудников заданного департамента.
-    public int salaryAverage(String departmentName) {
+    public int salaryAverage(String department) {
         NodeList departments = document.getElementsByTagName("department");
-        Node department;
-        NodeList departmentSalaries = null;
+        String attrDepartment="name";
+        Node departmentName;
         for (int i = 0; i < departments.getLength(); i++) {
-            department = departments.item(i);
-            if (department.getAttributes().item(0).getNodeValue().equals(departmentName)) {
-                return average(department,"salary");
+            departmentName = departments.item(i).getAttributes().getNamedItem(attrDepartment);
+            if (departmentName.getNodeValue().equals(department)) {
+                return average(departments.item(i),"salary");
             }
         }
         return 0;
@@ -73,9 +70,11 @@ public class XmlTask {
         String attrSecondName = "secondname";
         NodeList employee = document.getElementsByTagName(tegEmployee);
         Node node = null;
+        NamedNodeMap attributes;
         for (int i = 0; i < employee.getLength(); i++) {
-            //TODO не делай более 3-х последовательных вызовов
-            if (employee.item(i).getAttributes().getNamedItem(attrFirstName).getNodeValue().equals(firstName) && employee.item(i).getAttributes().getNamedItem(attrSecondName).getNodeValue().equals(secondName)) {
+           attributes=employee.item(i).getAttributes();
+            if (attributes.getNamedItem(attrFirstName).getNodeValue().equals(firstName)
+                    && attributes.getNamedItem(attrSecondName).getNodeValue().equals(secondName)) {
                 node = employee.item(i);
                 return node;
             }
@@ -87,40 +86,55 @@ public class XmlTask {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource domSource = new DOMSource(document);
-        StreamResult streamResult = new StreamResult(new File("C:/Users/User/IdeaProjects/starting-monkey-to-human-path/src/PO43/Ivanova/wdad/learn/xml/Appropriate.xml"));
+        StreamResult streamResult = new StreamResult(new File(path));
         transformer.transform(domSource, streamResult);
     }
 
     // изменяет должность сотрудника.
     public void setJobTitle(String firstName, String secondName, String newJobTitle) throws TransformerException {
         String tegJobTitle = "jobtitle";
-        String attrValue="value";
-        NodeList employee = findEmployee(firstName, secondName).getChildNodes();
-        for (int j = 0; j < employee.getLength(); j++) {
-            if (employee.item(j).getNodeName().equals(tegJobTitle)) {
-                employee.item(j).getAttributes().getNamedItem(attrValue).setNodeValue(newJobTitle);
+        String attrValue = "value";
+        NodeList employee = null;
+        try {
+            employee = findEmployee(firstName, secondName).getChildNodes();
+            for (int j = 0; j < employee.getLength(); j++) {
+                if (employee.item(j).getNodeName().equals(tegJobTitle)) {
+                    employee.item(j).getAttributes().getNamedItem(attrValue).setNodeValue(newJobTitle);
+                }
             }
+            writeDoc();
+        } catch (NullPointerException e) {
+            System.out.println("Сотрудник не найден");
         }
-        writeDoc();
+
     }
     //изменяет размер зароботной платы сотрудника.
     public void setSalary(String firstName, String secondName, int newSalary) throws TransformerException {
         String tegSalary = "salary";
-        Node employee=findEmployee(firstName,secondName); //TODO NullPointerException
-        NodeList employeeChild = employee.getChildNodes();
-        for (int i = 0; i < employeeChild.getLength(); i++) {
-            if (employeeChild.item(i).getNodeName().equals(tegSalary)) {
-                employeeChild.item(i).setTextContent(String.valueOf(newSalary));
+        NodeList employee = null;
+        String answer;
+        try {
+            employee = findEmployee(firstName, secondName).getChildNodes();
+            for (int i = 0; i < employee.getLength(); i++) {
+                if (employee.item(i).getNodeName().equals(tegSalary)) {
+                    employee.item(i).setTextContent(String.valueOf(newSalary));
+                }
             }
+            writeDoc();
+        } catch (NullPointerException e) {
+            System.out.println("Сотрудник не найден");
         }
-        writeDoc();
     }
 
     // удаляющий информацию о сотруднике.
     public void fireEmployee(String firstName, String secondName) throws TransformerException {
-        Node employee = findEmployee(firstName, secondName); //TODO NullPointerException
-        Node parent=employee.getParentNode();
-        parent.removeChild(employee);
-        writeDoc();
+        try {
+            Node employee = findEmployee(firstName, secondName);
+            Node parent = employee.getParentNode();
+            parent.removeChild(employee);
+            writeDoc();
+        }catch (NullPointerException e){
+            System.out.println("Сотрудник не найден");
+        }
     }
 }

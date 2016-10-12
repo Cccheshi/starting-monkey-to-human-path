@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<organization name="ФAS">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><organization name="ФAS">
 <department name="Продаж">
 <employee firstname="Александр" secondname="Перчиков">
-<hiredate>"29.02.2001"</hiredate>
-    <salary>20000</salary>
-<jobtitle value="assistant"/>
-    </employee>
+    <hiredate>"01.02.2003"</hiredate>
+    <salary>50000</salary>
+    <jobtitle value="asd"/>
+</employee>
     <employee firstname="Василий" secondname="Васькович">
         <hiredate>"01.01.2001"</hiredate>
         <salary>50000</salary>
@@ -13,7 +12,7 @@
     </employee>
     <employee firstname="Александр" secondname="Хулиганов">
     <hiredate>"01.02.2015"</hiredate>
-        <salary>500jhgfjhg0</salary>
+        <salary>5000</salary>
         <jobtitle value="manger"/>
     </employee>
 </department>
