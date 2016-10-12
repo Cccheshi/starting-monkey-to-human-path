@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><organization name="ФAS">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<organization name="ФAS">
 <department name="Продаж">
 <employee firstname="Александр" secondname="Перчиков">
 <hiredate>"29.02.2001"</hiredate>
@@ -12,7 +13,7 @@
     </employee>
     <employee firstname="Александр" secondname="Хулиганов">
     <hiredate>"01.02.2015"</hiredate>
-        <salary>5000</salary>
+        <salary>500jhgfjhg0</salary>
         <jobtitle value="manger"/>
     </employee>
 </department>
