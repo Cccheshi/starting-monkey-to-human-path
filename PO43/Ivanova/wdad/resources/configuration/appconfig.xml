@@ -2,13 +2,13 @@
     <rmi>
         <server>
             <registry>
-                <createregistry>newValue</createregistry>
+                <createregistry>yes</createregistry>
                 <registryaddress>localhost</registryaddress>
                 <registryport>1099</registryport>
             <bindedobject classname="NewClass" name="newName"/></registry>&gt;
         </server>
         <client>
-            <policypath>New</policypath>
+            <policypath>yes</policypath>
             <usecodebaseonly>no</usecodebaseonly>
         </client>
         <classprovider>http://www.yourhost.free.ru/cp/cp.jar</classprovider>

@@ -58,48 +58,54 @@ public class PreferencesManager  {
         for (String property:prop.stringPropertyNames()) {
             setProperty(property, prop.getProperty(property));
         }
-        writeDoc();
     }
     private String findPath(Node child){
+        String path;
         Node parent=child.getParentNode();
             if (parent.getNodeName().equals("#document")){
                 return child.getNodeName();
             }
-        return findPath(parent)+"."+child.getNodeName();
+            path=findPath(parent)+"."+child.getNodeName();
+        return path;
     }
     public Properties getProperties() throws XPathExpressionException {
         Properties properties = new Properties();
         String expression= "//*[not(*)]";
-        String key;
-        String value;
         String path;
+        Node node;
         NodeList nodeList=(NodeList) xPath.evaluate(expression,document,XPathConstants.NODESET);
-       for (int i=0;i<nodeList.getLength();i++){
-           path=findPath(nodeList.item(i));
-           key=path;
-           value=getProperty(key);
-           properties.put(key,value);
+        int length=nodeList.getLength();
+        String[] key = new String[length];
+        String[] value=new String[length];
+       for (int i=0;i<length;i++){
+           node=nodeList.item(i);
+           path=findPath(node);
+           key[i]=path;
+           value[i]=getProperty(key[i]);
+       }
+       for (int i=0;i<length;i++){
+           properties.put(key[i],value[i]);
        }
         return properties;
     }
     public void addBindedObject(String name, String className) throws TransformerException {
-        String bindedObject="bindedobject";
-        Element bindedObjectE=document.createElement(bindedObject);
+        String tagBindedObject="bindedobject";
+        Element bindedObject=document.createElement(tagBindedObject);
         Node registry=document.getElementsByTagName("registry").item(0);
-        registry.appendChild(bindedObjectE);
-        bindedObjectE.setAttribute("classname", className);
-        bindedObjectE.setAttribute("name", name);
+        registry.appendChild(bindedObject);
+        bindedObject.setAttribute("classname", className);
+        bindedObject.setAttribute("name", name);
         writeDoc();
     }
     public void removeBindedObject(String name) throws TransformerException {
         String TagBindedObject="bindedobject";
-        NodeList bindedObjectNL=document.getElementsByTagName(TagBindedObject);
+        NodeList bindedObjects=document.getElementsByTagName(TagBindedObject);
         Node bindedObject;
         NamedNodeMap attributes;
         String nodeValue;
         String tagName="name";
-        for (int i=0;i<bindedObjectNL.getLength();i++){
-            bindedObject=bindedObjectNL.item(i);
+        for (int i=0;i<bindedObjects.getLength();i++){
+            bindedObject=bindedObjects.item(i);
             attributes= bindedObject.getAttributes();
             nodeValue=attributes.getNamedItem(tagName).getNodeValue();
             if (nodeValue.equals(name)){
