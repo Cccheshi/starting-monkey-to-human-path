@@ -21,7 +21,7 @@ public class PreferencesManager {
     private String path = "C:/Users/User/IdeaProjects/starting-monkey-to-human-path/src/PO43/Ivanova/wdad/resources/configuration/appconfig.xml";
     Document document;
 
-    PreferencesManager() throws ParserConfigurationException, IOException, SAXException {
+    private PreferencesManager() throws ParserConfigurationException, IOException, SAXException {
         File file = new File(path);
         document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
     }
