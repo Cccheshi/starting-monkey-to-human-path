@@ -24,7 +24,7 @@ public class PreferencesManager  {
     Document document;
     XPath xPath;
 
-    PreferencesManager() throws ParserConfigurationException, IOException, SAXException {
+    private PreferencesManager() throws ParserConfigurationException, IOException, SAXException {
         File file = new File(path);
         document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
         this.xPath=XPathFactory.newInstance().newXPath();

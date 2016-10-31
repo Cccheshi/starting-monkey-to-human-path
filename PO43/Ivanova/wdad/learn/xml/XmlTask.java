@@ -2,6 +2,7 @@ package PO43.Ivanova.wdad.learn.xml;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
@@ -114,5 +115,14 @@ public class XmlTask {
         Node parent=employee.getParentNode();
         parent.removeChild(employee);
         writeDoc();
+    }
+    public void setHireDate(String firstName, String secondName, Date date){
+        String tagHiredate="hiredate";
+        NodeList employee=document.getElementsByTagName(tagHiredate);
+        for (int j = 0; j < employee.getLength(); j++) {
+            if (employee.item(j).getNodeName().equals(tagHiredate)) {
+                employee.item(j).setNodeValue(String.valueOf(date));
+            }
+        }
     }
 }
