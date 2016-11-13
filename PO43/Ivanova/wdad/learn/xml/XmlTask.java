@@ -2,7 +2,11 @@ package PO43.Ivanova.wdad.learn.xml;
 
 import java.io.File;
 import java.io.IOException;
+import java.rmi.RemoteException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
@@ -11,24 +15,26 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import PO43.Ivanova.wdad.learn.rmi.Department;
+import PO43.Ivanova.wdad.learn.rmi.Employee;
+import PO43.Ivanova.wdad.learn.rmi.JobTitle;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 public class XmlTask {
-    private String path="C:/Users/User/IdeaProjects/starting-monkey-to-human-path/src/PO43/Ivanova/wdad/learn/xml/Appropriate.xml";
+    private String path = "C:/Users/User/IdeaProjects/starting-monkey-to-human-path/src/PO43/Ivanova/wdad/learn/xml/Appropriate.xml";
     Document document;
 
     public XmlTask() throws ParserConfigurationException, IOException, SAXException {
-       document= createDocument();
+        document = createDocument();
     }
+
     private Document createDocument() throws ParserConfigurationException, IOException, SAXException {
         File file = new File(path);
         Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
         return document;
     }
+
     private int countSalaryAverage(NodeList nodeList) {
         int salary;
         int salarySum = 0;
@@ -76,18 +82,24 @@ public class XmlTask {
         }
         return node;
     }
-    private void writeDoc() throws TransformerException {
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        DOMSource domSource = new DOMSource(document);
-        StreamResult streamResult = new StreamResult(new File("C:/Users/User/IdeaProjects/starting-monkey-to-human-path/src/PO43/Ivanova/wdad/learn/xml/Appropriate.xml"));
-        transformer.transform(domSource, streamResult);
+
+    private void writeDoc() throws RemoteException {
+        try {
+
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource domSource = new DOMSource(document);
+            StreamResult streamResult = new StreamResult(new File("C:/Users/User/IdeaProjects/starting-monkey-to-human-path/src/PO43/Ivanova/wdad/learn/xml/Appropriate.xml"));
+            transformer.transform(domSource, streamResult);
+        } catch (TransformerException ex) {
+            throw new RemoteException();
+        }
     }
 
     // изменяет должность сотрудника.
-    public void setJobTitle(String firstName, String secondName, String newJobTitle) throws TransformerException {
+    public void setJobTitle(String firstName, String secondName, String newJobTitle) throws TransformerException, RemoteException {
         String tegJobTitle = "jobtitle";
-        String attrValue="value";
+        String attrValue = "value";
         NodeList employee = findEmployee(firstName, secondName).getChildNodes();
         for (int j = 0; j < employee.getLength(); j++) {
             if (employee.item(j).getNodeName().equals(tegJobTitle)) {
@@ -96,10 +108,11 @@ public class XmlTask {
         }
         writeDoc();
     }
+
     //изменяет размер зароботной платы сотрудника.
-    public void setSalary(String firstName, String secondName, int newSalary) throws TransformerException {
+    public void setSalary(String firstName, String secondName, int newSalary) throws TransformerException, RemoteException {
         String tegSalary = "salary";
-        Node employee=findEmployee(firstName,secondName);
+        Node employee = findEmployee(firstName, secondName);
         NodeList employeeChild = employee.getChildNodes();
         for (int i = 0; i < employeeChild.getLength(); i++) {
             if (employeeChild.item(i).getNodeName().equals(tegSalary)) {
@@ -108,21 +121,91 @@ public class XmlTask {
         }
         writeDoc();
     }
-
     // удаляющий информацию о сотруднике.
-    public void fireEmployee(String firstName, String secondName) throws TransformerException {
+    public void fireEmployee(String firstName, String secondName) throws TransformerException, RemoteException {
         Node employee = findEmployee(firstName, secondName);
-        Node parent=employee.getParentNode();
+        Node parent = employee.getParentNode();
         parent.removeChild(employee);
         writeDoc();
     }
-    public void setHireDate(String firstName, String secondName, Date date){
-        String tagHiredate="hiredate";
-        NodeList employee=document.getElementsByTagName(tagHiredate);
-        for (int j = 0; j < employee.getLength(); j++) {
-            if (employee.item(j).getNodeName().equals(tagHiredate)) {
-                employee.item(j).setNodeValue(String.valueOf(date));
+    private Node findDepartment(String departmentName) {
+        String tagDepartment = "department";
+        NodeList departments = document.getElementsByTagName(tagDepartment);
+        String departmentNameInXml;
+        Node department;
+        for (int i = 0; i < departments.getLength(); i++) {
+            department = departments.item(i);
+            departmentNameInXml = department.getAttributes().getNamedItem("name").getNodeValue();
+            if (departmentName.equals(departmentNameInXml)) {
+                return department;
             }
         }
+        return null;
     }
-}
+
+    private void createEmployee(Node employeeInXml, Employee employee) throws ParseException, RemoteException {
+        Date dateInXml;
+        Date hireDateInList = employee.getHireDate();
+        int salaryInList = employee.getSalary();
+        JobTitle attrJobTitleInList = employee.getJobTitle();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String hireDateInXml;
+        int salaryInXml;
+        String attrJobTitleInXml;
+        Node attr;
+        Element element = (Element) employeeInXml;
+        Node hireDate = element.getElementsByTagName("hiredate").item(0), jobTitle = element.getElementsByTagName("jobtitle").item(0),
+                salary = element.getElementsByTagName("salary").item(0);
+        hireDateInXml = hireDate.getTextContent();
+        dateInXml = simpleDateFormat.parse(hireDateInXml);
+        if (!dateInXml.equals(hireDateInList)) {
+            hireDate.setTextContent(String.valueOf(hireDateInList.toInstant()));
+            writeDoc();
+        }
+        attr = jobTitle.getAttributes().getNamedItem("value");
+        attrJobTitleInXml = attr.getNodeValue();
+        if (!attrJobTitleInXml.equals(attrJobTitleInList)) {
+            attr.setTextContent(attrJobTitleInXml);
+            writeDoc();
+        }
+        salaryInXml = Integer.valueOf(salary.getTextContent());
+        if (salaryInXml != salaryInList) {
+           salary.setTextContent(String.valueOf(salaryInList));
+            writeDoc();
+        }
+    }
+    public  void add(String departmentName, List<Employee> employees) throws ParseException, RemoteException {
+            NodeList employeesInXml;
+            Employee employee;
+            Node employeeInXml;
+            String fName, sName,fNameInXml,sNameInXml;
+            NamedNodeMap attr;
+        Element element;
+            Node departmentInXml= findDepartment(departmentName);
+            if (!departmentInXml.equals(null)){
+                element=(Element)departmentInXml;
+                employeesInXml=element.getElementsByTagName("employee");
+                for (int i=0;i<employees.size();i++){
+                    employee=employees.get(i);
+                    fName=employee.getFirstName();
+                    sName=employee.getSecondName();
+                    for (int j=0;j<employeesInXml.getLength();j++){
+                        employeeInXml=employeesInXml.item(j);
+                        attr=employeeInXml.getAttributes();
+                        sNameInXml=attr.getNamedItem("secondname").getNodeValue();
+                        fNameInXml=attr.getNamedItem("firstname").getNodeValue();
+                        if (fName.equals(fNameInXml)&& sName.equals(sNameInXml)){
+                            createEmployee(employeeInXml,employee);
+                        } else {
+                            System.out.println("Сотредник не найден");
+                        }
+                    }
+
+                }
+            }else {
+                System.out.println("Департамент не найден");
+            }
+            writeDoc();
+
+        }
+    }

@@ -98,17 +98,17 @@ public class PreferencesManager  {
         writeDoc();
     }
     public void removeBindedObject(String name) throws TransformerException {
-        String TagBindedObject="bindedobject";
-        NodeList bindedObjects=document.getElementsByTagName(TagBindedObject);
+        String TagBindedObject = "bindedobject";
+        NodeList bindedObjects = document.getElementsByTagName(TagBindedObject);
         Node bindedObject;
         NamedNodeMap attributes;
         String nodeValue;
-        String tagName="name";
-        for (int i=0;i<bindedObjects.getLength();i++){
-            bindedObject=bindedObjects.item(i);
-            attributes= bindedObject.getAttributes();
-            nodeValue=attributes.getNamedItem(tagName).getNodeValue();
-            if (nodeValue.equals(name)){
+        String tagName = "name";
+        for (int i = 0; i < bindedObjects.getLength(); i++) {
+            bindedObject = bindedObjects.item(i);
+            attributes = bindedObject.getAttributes();
+            nodeValue = attributes.getNamedItem(tagName).getNodeValue();
+            if (nodeValue.equals(name)) {
                 bindedObject.getParentNode().removeChild(bindedObject);
             }
         }

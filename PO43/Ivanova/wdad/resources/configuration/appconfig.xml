@@ -2,10 +2,10 @@
     <rmi>
         <server>
             <registry>
-                <createregistry>yes</createregistry>
+                <createregistry>no</createregistry>
                 <registryaddress>localhost</registryaddress>
-                <registryport>1099</registryport>
-            <bindedobject classname="NewClass" name="newName"/></registry>&gt;
+                <registryport>2001</registryport>
+            <bindedobject classname="NewClass" name="newName"/><bindedobject classname="PO43.Ivanova.wdad.learn.rmi.XmlDataManagerImpl" name="xmlDataManager"/><bindedobject classname="PO43.Ivanova.wdad.learn.rmi.XmlDataManagerImpl" name="xmlDataManager"/><bindedobject classname="PO43.Ivanova.wdad.learn.rmi.XmlDataManagerImpl" name="xmlDataManager"/><bindedobject classname="PO43.Ivanova.wdad.learn.rmi.XmlDataManagerImpl" name="xmlDataManager"/><bindedobject classname="PO43.Ivanova.wdad.learn.rmi.XmlDataManagerImpl" name="xmlDataManager"/><bindedobject classname="PO43.Ivanova.wdad.learn.rmi.XmlDataManagerImpl" name="xmlDataManager"/><bindedobject classname="PO43.Ivanova.wdad.learn.rmi.XmlDataManagerImpl" name="xmlDataManager"/><bindedobject classname="PO43.Ivanova.wdad.learn.rmi.XmlDataManagerImpl" name="xmlDataManager"/><bindedobject classname="PO43.Ivanova.wdad.learn.rmi.XmlDataManagerImpl" name="xmlDataManager"/><bindedobject classname="PO43.Ivanova.wdad.learn.rmi.XmlDataManagerImpl" name="xmlDataManager"/><bindedobject classname="PO43.Ivanova.wdad.learn.rmi.XmlDataManagerImpl" name="xmlDataManager"/><bindedobject classname="PO43.Ivanova.wdad.learn.rmi.XmlDataManagerImpl" name="xmlDataManager"/><bindedobject classname="PO43.Ivanova.wdad.learn.rmi.XmlDataManagerImpl" name="xmlDataManager"/><bindedobject classname="PO43.Ivanova.wdad.learn.rmi.XmlDataManagerImpl" name="xmlDataManager"/><bindedobject classname="PO43.Ivanova.wdad.learn.rmi.XmlDataManagerImpl" name="xmlDataManager"/><bindedobject classname="PO43.Ivanova.wdad.learn.rmi.XmlDataManagerImpl" name="xmlDataManager"/><bindedobject classname="PO43.Ivanova.wdad.learn.rmi.XmlDataManagerImpl" name="xmlDataManager"/><bindedobject classname="PO43.Ivanova.wdad.learn.rmi.XmlDataManagerImpl" name="xmlDataManager"/><bindedobject classname="PO43.Ivanova.wdad.learn.rmi.XmlDataManagerImpl" name="xmlDataManager"/></registry>&gt;
         </server>
         <client>
             <policypath>yes</policypath>
