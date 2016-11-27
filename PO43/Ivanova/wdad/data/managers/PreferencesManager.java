@@ -1,6 +1,7 @@
 package PO43.Ivanova.wdad.data.managers;
 
-import org.w3c.dom.Document;
+import PO43.Ivanova.wdad.utils.PreferencesConstantManager;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -10,33 +11,29 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Properties;
+import java.util.Set;
 
-/**
- * Created by Ирина on 09.10.2016.
- */
-public class PreferencesManager {
+public class PreferencesManager  {
     private static PreferencesManager instance;
     private String path = "C:/Users/User/IdeaProjects/starting-monkey-to-human-path/src/PO43/Ivanova/wdad/resources/configuration/appconfig.xml";
     Document document;
+    XPath xPath;
 
-    PreferencesManager() throws ParserConfigurationException, IOException, SAXException {
+    private PreferencesManager() throws ParserConfigurationException, IOException, SAXException {
         File file = new File(path);
         document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
+        this.xPath=XPathFactory.newInstance().newXPath();
     }
 
     public static PreferencesManager getInstance() throws IOException, SAXException, ParserConfigurationException {
         if (instance == null)
             instance = new PreferencesManager();
         return instance;
-    }
-
-    public boolean isCreateRegistry() {
-        String tegCreateRegistry = "createregistry";
-        if (document.getElementsByTagName(tegCreateRegistry).item(0).getTextContent().equals("yes"))
-            return true;
-        return false;
     }
     private void writeDoc() throws TransformerException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -45,6 +42,86 @@ public class PreferencesManager {
         StreamResult streamResult = new StreamResult(new File(path));
         transformer.transform(domSource, streamResult);
     }
+    //XPATH
+    public void setProperty(String key, String value) throws XPathExpressionException, TransformerException {
+        String xPathKey = '/' + key.replace('.', '/');
+        Node node=(Node)xPath.evaluate(xPathKey,document, XPathConstants.NODE);
+        node.setTextContent(value);
+       writeDoc();
+    }
+    public String getProperty(String key) throws XPathExpressionException {
+        String xPathKey = '/' + key.replace('.', '/');
+        Node node=(Node)xPath.evaluate(xPathKey,document,XPathConstants.NODE);
+        return node.getTextContent();
+    }
+    public void setProperties(Properties prop) throws XPathExpressionException, TransformerException {
+        for (String property:prop.stringPropertyNames()) {
+            setProperty(property, prop.getProperty(property));
+        }
+    }
+    private String findPath(Node child){
+        String path;
+        Node parent=child.getParentNode();
+            if (parent.getNodeName().equals("#document")){
+                return child.getNodeName();
+            }
+            path=findPath(parent)+"."+child.getNodeName();
+        return path;
+    }
+    public Properties getProperties() throws XPathExpressionException {
+        Properties properties = new Properties();
+        String expression= "//*[not(*)]";
+        String path;
+        Node node;
+        NodeList nodeList=(NodeList) xPath.evaluate(expression,document,XPathConstants.NODESET);
+        int length=nodeList.getLength();
+        String[] key = new String[length];
+        String[] value=new String[length];
+       for (int i=0;i<length;i++){
+           node=nodeList.item(i);
+           path=findPath(node);
+           key[i]=path;
+           value[i]=getProperty(key[i]);
+       }
+       for (int i=0;i<length;i++){
+           properties.put(key[i],value[i]);
+       }
+        return properties;
+    }
+    public void addBindedObject(String name, String className) throws TransformerException {
+        String tagBindedObject="bindedobject";
+        Element bindedObject=document.createElement(tagBindedObject);
+        Node registry=document.getElementsByTagName("registry").item(0);
+        registry.appendChild(bindedObject);
+        bindedObject.setAttribute("classname", className);
+        bindedObject.setAttribute("name", name);
+        writeDoc();
+    }
+    public void removeBindedObject(String name) throws TransformerException {
+        String TagBindedObject = "bindedobject";
+        NodeList bindedObjects = document.getElementsByTagName(TagBindedObject);
+        Node bindedObject;
+        NamedNodeMap attributes;
+        String nodeValue;
+        String tagName = "name";
+        for (int i = 0; i < bindedObjects.getLength(); i++) {
+            bindedObject = bindedObjects.item(i);
+            attributes = bindedObject.getAttributes();
+            nodeValue = attributes.getNamedItem(tagName).getNodeValue();
+            if (nodeValue.equals(name)) {
+                bindedObject.getParentNode().removeChild(bindedObject);
+            }
+        }
+        writeDoc();
+    }
+    @Deprecated
+    public boolean isCreateRegistry() {
+        String tegCreateRegistry = "createregistry";
+        if (document.getElementsByTagName(tegCreateRegistry).item(0).getTextContent().equals("yes"))
+            return true;
+        return false;
+    }
+    @Deprecated
     public void setCreateRegistry(boolean createRegistry) throws TransformerException {
         String textContent;
         String tegCreateRegistry = "createregistry";
@@ -54,23 +131,23 @@ public class PreferencesManager {
         document.getElementsByTagName(tegCreateRegistry).item(0).setTextContent(textContent);
         writeDoc();
     }
-
+    @Deprecated
     public String getRegistryAddress() {
         String tegRegistryAddress = "registryaddress";
         return document.getElementsByTagName(tegRegistryAddress).item(0).getTextContent();
     }
-
+    @Deprecated
     public void setRegistryAddress(String newTextContent) throws TransformerException {
         String tegRegistryAddress = "registryaddress";
         document.getElementsByTagName(tegRegistryAddress).item(0).setTextContent(newTextContent);
         writeDoc();
     }
-
+    @Deprecated
     public String getRegistryPort() {
         String tegRegistryPort = "registryport";
         return document.getElementsByTagName(tegRegistryPort).item(0).getTextContent();
     }
-
+    @Deprecated
     public void setRegistryPort(String newRegistryPort) throws TransformerException {
         String tegRegistryPort = "registryport";
         document.getElementsByTagName(tegRegistryPort).item(0).setTextContent(newRegistryPort);
@@ -81,18 +158,19 @@ public class PreferencesManager {
         String tegPolicyPath = "policypath";
         return document.getElementsByTagName(tegPolicyPath).item(0).getTextContent();
     }
-
+    @Deprecated
     public void setPolicyPath(String newPolicyPath) {
         String tegPolicyPath = "policypath";
         document.getElementsByTagName(tegPolicyPath).item(0).setTextContent(newPolicyPath);
     }
-
+    @Deprecated
     public boolean isUseCodeBaseOnly() {
         String tegUseCodebaseOnly = "usecodebaseonly";
         if (document.getElementsByTagName(tegUseCodebaseOnly).item(0).getTextContent().equals("yes"))
             return true;
         return false;
     }
+    @Deprecated
     public void setUseCodeBaseOnly(boolean newUseCodeBaseOnly) throws TransformerException {
         String tegUseCodebaseOnly = "usecodebaseonly";
         String textContent;
@@ -102,10 +180,12 @@ public class PreferencesManager {
         document.getElementsByTagName(tegUseCodebaseOnly).item(0).setTextContent(textContent);
         writeDoc();
     }
+    @Deprecated
     public String getClassProvider(){
         String tegClassProvider="classprovider";
         return document.getElementsByTagName(tegClassProvider).item(0).getTextContent();
     }
+    @Deprecated
     public void setClassProvider(String newClassProvider) throws TransformerException {
         String tegClassProvider="classprovider";
         document.getElementsByTagName(tegClassProvider).item(0).setTextContent(newClassProvider);

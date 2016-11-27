@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><organization name="ФAS">
-<department name="Продаж">
-<employee firstname="Александр" secondname="Перчиков">
-<hiredate>"29.02.2001"</hiredate>
-    <salary>20000</salary>
-<jobtitle value="assistant"/>
-    </employee>
+    <department name="Продаж">
+        <employee firstname="Александр" secondname="Перчиков">
+             <hiredate>29-04-2007</hiredate>
+             <salary>74185</salary>
+             <jobtitle value="assistant"/>
+         </employee>
     <employee firstname="Василий" secondname="Васькович">
-        <hiredate>"01.01.2001"</hiredate>
+        <hiredate>01-04-2004</hiredate>
         <salary>50000</salary>
-        <jobtitle value="manager"/>
+        <jobtitle value="head"/>
     </employee>
-    <employee firstname="Александр" secondname="Хулиганов">
-    <hiredate>"01.02.2015"</hiredate>
-        <salary>5000</salary>
-        <jobtitle value="manger"/>
-    </employee>
+        <employee firstname="Александр" secondname="Хулиганов">
+            <hiredate>01-02-2015</hiredate>
+            <salary>5000</salary>
+            <jobtitle value="manager"/>
+        </employee>
+    
 </department>
     <department name="Финансовый">
         <employee firstname="Ирина" secondname="Ксеновна">
-            <hiredate>"20.12.2015"</hiredate>
-            <salary>30000</salary>
-            <jobtitle value="head"/>
+            <hiredate>20-12-2015</hiredate>
+            <salary>2000</salary>
+            <jobtitle value="secretary"/>
         </employee>
         <employee firstname="Кристина" secondname="Ринатовна">
-            <hiredate>"20.11.2016"</hiredate>
+            <hiredate>20-11-2016</hiredate>
             <salary>25000</salary>
             <jobtitle value="manager"/>
                 </employee>
