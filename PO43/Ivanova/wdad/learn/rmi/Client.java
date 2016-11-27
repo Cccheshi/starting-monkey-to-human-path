@@ -7,7 +7,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class Client {
             int port = Integer.valueOf(getProperty);
             String address = preferencesManager.getProperty(PreferencesConstantManager.REGISTRY_ADDRESS);
             Registry registry = LocateRegistry.getRegistry(address, port);
-            XmlDataManager xmlDataManager = ((XmlDataManager) registry.lookup("xmlDataManager"));
+            XmlDataManager xmlDataManager=((XmlDataManager)registry.lookup("xmlDataManager"));
             Date date;
             SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
             date = format.parse("20-12-2015");
@@ -47,7 +47,7 @@ public class Client {
             employees2.add(employee4);
             employees2.add(employee5);
             Department department2=new Department("Финансовый",employees2);
-           /* xmlDataManager.setSalary(employee1,100);
+            xmlDataManager.setSalary(employee1,100);
             System.out.println(xmlDataManager.salaryAverage());
             System.out.println(xmlDataManager.salaryAverage("Финансовый"));
             System.out.println(employee2.getJobTitle());

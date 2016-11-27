@@ -1,5 +1,8 @@
 package PO43.Ivanova.wdad.learn.rmi;
 
+import PO43.Ivanova.wdad.learn.rmi.Department;
+import PO43.Ivanova.wdad.learn.rmi.Employee;
+import PO43.Ivanova.wdad.learn.rmi.JobTitle;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><organization name="ФAS">
     <department name="Продаж">
         <employee firstname="Александр" secondname="Перчиков">
-             <hiredate>2007-04-28T20:00:00Z</hiredate>
+             <hiredate>29-04-2007</hiredate>
              <salary>74185</salary>
              <jobtitle value="assistant"/>
          </employee>
     <employee firstname="Василий" secondname="Васькович">
-        <hiredate>2004-03-31T20:00:00Z</hiredate>
+        <hiredate>01-04-2004</hiredate>
         <salary>50000</salary>
         <jobtitle value="head"/>
     </employee>
         <employee firstname="Александр" secondname="Хулиганов">
-            <hiredate>2015-01-31T21:00:00Z</hiredate>
+            <hiredate>01-02-2015</hiredate>
             <salary>5000</salary>
             <jobtitle value="manager"/>
         </employee>
@@ -20,7 +20,7 @@
     <department name="Финансовый">
         <employee firstname="Ирина" secondname="Ксеновна">
             <hiredate>20-12-2015</hiredate>
-            <salary>30000</salary>
+            <salary>2000</salary>
             <jobtitle value="secretary"/>
         </employee>
         <employee firstname="Кристина" secondname="Ринатовна">

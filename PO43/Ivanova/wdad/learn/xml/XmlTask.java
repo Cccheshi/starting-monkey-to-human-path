@@ -159,19 +159,16 @@ public class XmlTask {
         hireDateInXml = hireDate.getTextContent();
         dateInXml = simpleDateFormat.parse(hireDateInXml);
         if (!dateInXml.equals(hireDateInList)) {
-            hireDate.setTextContent(String.valueOf(hireDateInList.toInstant()));
-            writeDoc();
+            hireDate.setTextContent(simpleDateFormat.format(hireDateInList));
         }
         attr = jobTitle.getAttributes().getNamedItem("value");
         attrJobTitleInXml = attr.getNodeValue();
         if (!attrJobTitleInXml.equals(attrJobTitleInList)) {
             attr.setTextContent(attrJobTitleInXml);
-            writeDoc();
         }
         salaryInXml = Integer.valueOf(salary.getTextContent());
         if (salaryInXml != salaryInList) {
            salary.setTextContent(String.valueOf(salaryInList));
-            writeDoc();
         }
     }
     public  void add(String departmentName, List<Employee> employees) throws ParseException, RemoteException {
@@ -197,7 +194,7 @@ public class XmlTask {
                         if (fName.equals(fNameInXml)&& sName.equals(sNameInXml)){
                             createEmployee(employeeInXml,employee);
                         } else {
-                            System.out.println("Сотредник не найден");
+                            System.out.println("Сотрудник не найден: "+fName+" "+sName);
                         }
                     }
 
